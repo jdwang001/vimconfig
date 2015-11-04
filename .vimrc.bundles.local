@@ -1,0 +1,2 @@
+Bundle 'rdnetto/YCM-Generator'
+UnBundle 'derekwyatt/vim-scala'

@@ -1,0 +1,104 @@
+"colorscheme ir_black 
+"fruity.vim    ir_black.vim  molokai.vim   peaksea.vim
+"let g:Powerline_symbols = 'fancy'
+set mouse -=a
+let g:indent_guides_guide_size = 1 
+let g:indent_guides_auto_colors = 0
+
+set fencs=utf-8,GB18030,default
+
+let g:airline_powerline_fonts=1
+
+let NERDTreeChDirMode = 2
+let NERDTreeWinSize = 30
+nmap <F5>  :NERDTreeToggle<CR> 
+
+nnoremap <F6> :TagbarToggle<CR> "我一般把tagbar绑在<F6>上
+"let g:tagbar_autoclose=1 "在一个tag上按回车后，自动跳转到tag在文件的位置，并关闭tagbar
+let Tlist_Close_On_Select = 0
+"
+"YoucompleteMe相关配置
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:syntastic_always_populate_loc_list = 1
+let g:ycm_filetype_blacklist = {
+      \ 'tagbar' : 1,
+      \ 'qf' : 1,
+      \ 'notes' : 1,
+      \ 'unite' : 1,
+      \ 'text' : 1,
+      \ 'vimwiki' : 1,
+      \ 'gitcommit' : 1,
+      \}
+let g:ycm_semantic_triggers = {
+  \     'c' : ['->', '  ', '.', ' ', '(', '[', '&'],
+  \     'cpp,objcpp' : ['->', '.', ' ', '(', '[', '&', '::'],
+  \     'perl' : ['->', '::', ' '],
+  \     'php' : ['->', '::', '.'],
+  \     'cs,java,javascript,d,vim,python,perl6,scala,vb,elixir,go' : ['.'],
+  \     'ruby' : ['.', '::'],
+  \     'lua' : ['.', ':']
+  \ }
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>jl :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>jf :YcmCompleter GoToDefinition<CR>
+nnoremap <F8> :YcmGenerateConfig<CR> :e<CR>
+
+"自动加载cscope.out文件"
+"if filereadable("cscope.out")
+    "cs add cscope.out
+"endif
+
+"cscope 配置
+if has("cscope")
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+    set csto=0
+    set cst
+    set csverb
+    set csto=0
+    set cst
+    set nocsverb
+    " add any database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out
+    " else add database pointed to by environment
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+
+    "0 或 s 查找本 C 符号(可以跳过注释)
+    "1 或 g 查找本定义
+    "2 或 d 查找本函数调用的函数
+    "3 或 c 查找调用本函数的函数
+    "4 或 t 查找本字符串
+    "6 或 e 查找本 egrep 模式
+    "7 或 f 查找本文件
+    "8 或 i 查找包含本文件的文件
+
+    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>:copen<CR>
+    nmap <C-\>i :cs find i <C-R>=expand("<cfile>")<CR>$<CR>:copen<CR>
+    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>:copen<CR>
+
+endif
+
+
+map <F10> :call Do_CsTag()<CR> 
+function Do_CsTag()
+    if(executable("cscope") && has("cscope") )
+        if(has('win32'))
+            silent! execute "!dir /b *.c,*.cpp,*.h,*.java,*.cs >> cscope.files"
+        else
+            silent! execute "!find . -name "*.h" -o -name "*.c" -o -name "*.cpp" -o -name "*.m" -o -name "*.mm" -o -name "*.java" -o -name "*.py" > cscope.files"
+        endif
+        silent! execute "!cscope -b"
+    endif
+endf
+
+
+
+
